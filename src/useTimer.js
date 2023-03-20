@@ -2,14 +2,16 @@ import { useState, useRef } from "react";
 
 const useTimer = (ini = 0) => {
   const [time, setTime] = useState(0);
-
   const isStart = useRef(false);
   const startButton = useRef();
   const refInterval = useRef(0);
 
   const startTimer = () => {
-    isStart.current = true;
+    if (isStart.current === true) {
+      return;
+    }
     startButton.current.disabled = true;
+    isStart.current = true;
     refInterval.current = setInterval(() => {
       if (isStart.current) {
         setTime((time) => time + 1);
@@ -25,6 +27,7 @@ const useTimer = (ini = 0) => {
     setTime(0);
     clearInterval(refInterval.current);
     startButton.current.disabled = false;
+    isStart.current = false;
   };
 
   return { time, startTimer, stopTimer, resetTimer, startButton };
